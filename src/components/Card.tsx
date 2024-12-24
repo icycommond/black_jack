@@ -13,7 +13,7 @@ export function Card({ card }: CardProps) {
 
   if (hidden) {
     return (
-      <div className="w-24 h-36 bg-white rounded-lg shadow-md border-2 border-gray-300 flex items-center justify-center">
+      <div className="w-24 h-36 bg-white rounded-lg shadow-md border-2 border-gray-300 flex items-center justify-center -ml-16 first:ml-0 xs:ml-0 relative hover:z-10">
         <div className="w-20 h-32 bg-blue-600 rounded-md flex items-center justify-center">
           <div className="text-white text-2xl">🂠</div>
         </div>
@@ -22,7 +22,7 @@ export function Card({ card }: CardProps) {
   }
 
   return (
-    <div className="w-24 h-36 bg-white rounded-lg shadow-lg border-2 border-gray-300 flex flex-col p-2 leading-none">
+    <div className="w-24 h-36 bg-white rounded-lg shadow-lg border-2 border-gray-300 flex flex-col p-2 leading-none -ml-16 first:ml-0 xs:ml-0 relative hover:z-10">
       {/* 左上角 */}
       <div className={`text-left ${textColor}`}>
         <div className="text-xl font-bold leading-none">{rank}</div>

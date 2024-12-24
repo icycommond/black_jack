@@ -24,10 +24,10 @@ const Game = () => {
     <div className="game-container">
       <div className="game-table">
         <div className="flex justify-between w-full px-4">
-          <div className="text-white text-xl">
+          <div className="text-yellow-400 text-xl">
             筹码: {chips}
           </div>
-          <div className="text-white text-xl">
+          <div className="text-yellow-400 text-xl">
             当前下注: {currentBet}
           </div>
         </div>
