@@ -118,10 +118,9 @@ export function useGame() {
   }, [deck, playerHand, gameStatus, currentBet]);
 
   // 更新结果判定
-  const determineWinner = useCallback(() => {
-    const playerValue = calculateHandValue(playerHand);
-    const dealerValue = calculateHandValue(dealerHand);
-    console.log({ dealerValue, dealerHand });
+  const determineWinner = useCallback(({ player, dealer}: { player?: Card[]; dealer?: Card[]}) => {
+    const playerValue = calculateHandValue(player ?? playerHand);
+    const dealerValue = calculateHandValue(dealer ?? dealerHand);
 
     if (gameStatus === 'game-over') return;
 
@@ -147,34 +146,41 @@ export function useGame() {
   const dealerPlay = useCallback(async () => {
     // let currentDealerHand = dealerHand.map(card => ({ ...card, hidden: false }));
     let currentDeck = deck;
-    
+    let newHand: Card[] = [];
 
     const dealerAction = async (currentDealerHand: Card[]) => {
       // 使用 Promise 来处理延时
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      newHand = currentDealerHand;
+
       const dealerValue = calculateHandValue(currentDealerHand);
-      
+
       if (dealerValue < 17 && currentDealerHand.length < 5) {
         // 庄家要牌
         const [newCard, remainingDeck] = drawCard(currentDeck);
-        currentDealerHand = [...currentDealerHand, { ...newCard, hidden: false }];
+        currentDealerHand = [
+          ...currentDealerHand,
+          { ...newCard, hidden: false },
+        ];
         currentDeck = remainingDeck;
-        
+
         // 更新状态
         setDealerHand(currentDealerHand);
         setDeck(currentDeck);
-        setMessage(`庄家要牌...（当前 ${calculateHandValue(currentDealerHand)} 点）`);
-        
+        setMessage(
+          `庄家要牌...（当前 ${calculateHandValue(currentDealerHand)} 点）`
+        );
+
         // 使用 await 等待下一次行动
         await dealerAction(currentDealerHand);
       } else {
         // 庄家停牌
-        const stopReason = currentDealerHand.length >= 5 
-          ? "已达到5张牌上限" 
-          : `点数已达到${dealerValue}点`;
+        const stopReason =
+          currentDealerHand.length >= 5
+            ? "已达到5张牌上限"
+            : `点数已达到${dealerValue}点`;
         setMessage(`庄家停牌（${stopReason})`);
-        
+
         // 确保最终手牌状态已更新
         setDealerHand(currentDealerHand);
         setDeck(currentDeck);
@@ -182,10 +188,10 @@ export function useGame() {
     };
 
     // 开始庄家回合
-    await dealerAction(dealerHand.map(card => ({ ...card, hidden: false })));
-    
+    await dealerAction(dealerHand.map((card) => ({ ...card, hidden: false })));
+
     // 进行结果判定
-    determineWinner();
+    determineWinner({ dealer: newHand });
   }, [deck, dealerHand, determineWinner]);
 
   // 玩家停牌
