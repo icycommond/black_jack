@@ -21,29 +21,29 @@ const Game = () => {
   } = useGame();
 
   return (
-    <div className="game-container">
+    <div className="game-container min-h-screen">
       <div className="game-table">
-        <div className="flex justify-between w-full px-4">
-          <div className="text-yellow-400 text-xl">
+        <div className="flex justify-between w-full px-4 py-2">
+          <div className="text-yellow-400 text-lg">
             筹码: {chips}
           </div>
-          <div className="text-yellow-400 text-xl">
+          <div className="text-yellow-400 text-lg">
             当前下注: {currentBet}
           </div>
         </div>
 
-        <div className="dealer-area">
+        <div className="dealer-area min-h-[120px] py-2">
           <Hand cards={dealerHand} isDealer />
         </div>
         
-        <div className="status-bar">
+        <div className="status-bar my-1">
           {message}
         </div>
 
-        <div className="player-area">
+        <div className="player-area min-h-[120px] py-2">
           <Hand cards={playerHand} />
           {gameStatus === 'playing' && (
-            <div className="text-white text-lg text-center mt-4">
+            <div className="text-white text-sm text-center mt-2">
               当前 {playerHand.length} 张牌
               {playerHand.length === 4 && (
                 <span className="text-yellow-400 ml-2">
@@ -54,7 +54,7 @@ const Game = () => {
           )}
         </div>
 
-        <div className="controls">
+        <div className="controls mt-2">
           {gameStatus === 'idle' ? (
             <button
               onClick={startNewGame}
