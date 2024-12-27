@@ -17,7 +17,8 @@ const Game = () => {
     placeBet,
     startDealing,
     hit,
-    stand 
+    stand,
+    bestRecord,
   } = useGame();
 
   return (
@@ -116,6 +117,7 @@ const Game = () => {
             </button>
           )}
         </div>
+        <div className="flex justify-center items-center text-sm mt-2">最佳战绩:&ensp; <span className="text-yellow-400 text-xl">{bestRecord}</span></div>
       </div>
     </div>
   );
