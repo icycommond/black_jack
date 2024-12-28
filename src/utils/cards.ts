@@ -60,13 +60,23 @@ export function calculateHandValue(hand: Card[]): number {
     }
   }
 
-  // 再处理A
-  for (let i = 0; i < aces; i++) {
-    if (sum + 11 <= 21) {
-      sum += 11;
-    } else {
-      sum += 1;
+  // 处理所有A
+  // 对于每张A，我们都尝试使用11点，如果总和超过21点就使用1点
+  if (aces > 0) {
+    const possibilities = [];
+    // 生成所有可能的A的组合（1或11）
+    for (let i = 0; i < Math.pow(2, aces); i++) {
+      let tempSum = sum;
+      for (let j = 0; j < aces; j++) {
+        // 使用位运算来决定当前的A是11还是1
+        tempSum += (i & (1 << j)) ? 11 : 1;
+      }
+      if (tempSum <= 21) {
+        possibilities.push(tempSum);
+      }
     }
+    // 如果有合法的组合，返回最大值；否则返回最小可能值（所有A都算1）
+    return possibilities.length > 0 ? Math.max(...possibilities) : sum + aces;
   }
 
   return sum;
