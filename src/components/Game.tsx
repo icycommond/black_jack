@@ -3,7 +3,7 @@ import { Hand } from './Hand';
 import { BetAmount } from '../types/game';
 import '../styles/Game.css';
 
-const BET_OPTIONS: BetAmount[] = [10, 50, 100, 500];
+const BET_OPTIONS: BetAmount[] = [10, 50, 100, 500, 1000, 5000, 10000];
 
 const Game = () => {
   const { 

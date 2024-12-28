@@ -12,4 +12,4 @@ export type Deck = Card[];
 
 export type GameStatus = 'idle' | 'betting' | 'playing' | 'bust' | 'dealer-turn' | 'game-over';
 
-export type BetAmount = 10 | 50 | 100 | 500; 
+export type BetAmount = 10 | 50 | 100 | 500 | 1000 | 5000 | 10000; 

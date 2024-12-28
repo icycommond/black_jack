@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Card, Deck, GameStatus, BetAmount } from "../types/game";
 import {
   createDeck,
@@ -12,6 +12,11 @@ const getBestRecord = () => {
   const record = localStorage.getItem(BEST_RECORD_KEY);
   return record ? parseInt(record) : 0;
 };
+const code = new URLSearchParams(window.location.search).get('code') || '';
+const CHIPS = {
+  "showmethemoney": 50000,
+  "whosyourdaddy": 1000000,
+}
 
 export function useGame() {
   const [deck, setDeck] = useState<Deck>(() => shuffleDeck(createDeck()));
@@ -21,7 +26,7 @@ export function useGame() {
   const [message, setMessage] = useState<string>("等待开始");
   const [bestRecord, setBestRecord] = useState<number>(getBestRecord());
   // 筹码相关状态
-  const [chips, setChips] = useState<number>(1000); // 玩家总筹码
+  const [chips, setChips] = useState<number>(CHIPS[code as keyof typeof CHIPS] || 1000); // 玩家总筹码
   const [currentBet, setCurrentBet] = useState<number>(0); // 当前下注金额
 
   // 下注
@@ -68,10 +73,10 @@ export function useGame() {
   const handleWin = useCallback(() => {
     setChips((prev) => {
       const target = prev + currentBet * 2;
-      if (target > bestRecord) {
-        setBestRecord(target);
-        localStorage.setItem(BEST_RECORD_KEY, target.toString());
-      }
+      // if (target > bestRecord) {
+      //   setBestRecord(target);
+      //   localStorage.setItem(BEST_RECORD_KEY, target.toString());
+      // }
       return target;
     });
     setMessage(`你赢了！获得 ${currentBet} 筹码！`);
@@ -131,6 +136,14 @@ export function useGame() {
       setMessage("注意：下一张牌将触发五龙判定！");
     }
   }, [deck, playerHand, gameStatus, currentBet]);
+
+  useEffect(() => {
+    if (gameStatus === "game-over" && chips > bestRecord) {
+      console.log(`更新最佳战绩: ${chips}`);
+      setBestRecord(chips);
+      localStorage.setItem(BEST_RECORD_KEY, chips.toString());
+    }
+  }, [chips, gameStatus]);
 
   // 更新结果判定
   const determineWinner = useCallback(
